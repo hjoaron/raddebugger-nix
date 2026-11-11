@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    raddebugger = {
+    raddebugger-src = {
       url = "github:EpicGames/raddebugger";
       flake = false;
     };
@@ -14,7 +14,7 @@
     self,
     nixpkgs,
     flake-utils,
-    raddebugger,
+    raddebugger-src,
   }: let
     supportedSystems = ["x86_64-linux"];
   in
@@ -30,9 +30,9 @@
 
         raddbgPkg = pkgs.clangStdenv.mkDerivation {
           pname = "raddebugger";
-          version = "0.9.30-unstable-${raddebugger.shortRev or raddebugger.lastModifiedDate or "dirty"}";
+          version = "${raddebugger-src.shortRev or raddebugger-src.lastModifiedDate}";
 
-          src = raddebugger;
+          src = raddebugger-src;
 
           nativeBuildInputs = with pkgs; [
             pkg-config
@@ -63,7 +63,7 @@
           postPatch = ''
             patchShebangs build.sh
             substituteInPlace build.sh \
-              --replace-fail 'auto_compile_flags=""' 'auto_compile_flags="-DBUILD_GIT_HASH=\"${raddebugger.shortRev or "unknown"}\" "'
+              --replace-fail 'auto_compile_flags=""' 'auto_compile_flags="-DBUILD_GIT_HASH=\"${raddebugger-src.shortRev or "unknown"}\" "'
           '';
 
           buildPhase = ''
@@ -113,7 +113,7 @@
           raddbg = {
             type = "app";
             program = "${raddbgPkg}/bin/raddbg";
-            meta = raddbg.meta;
+            meta = raddbgPkg.meta;
           };
           raddebugger = raddbg;
           default = raddbg;

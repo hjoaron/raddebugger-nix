@@ -34,7 +34,7 @@
         "type": "github"
       }
     },
-    "raddebugger": {
+    "raddebugger-src": {
       "flake": false,
       "locked": {
         "lastModified": 1793812827,
@@ -54,7 +54,7 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
-        "raddebugger": "raddebugger"
+        "raddebugger-src": "raddebugger-src"
       }
     },
     "systems": {
